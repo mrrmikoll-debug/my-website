@@ -3,63 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Space</title>
+    <title>M1cro | Terminal Access</title>
     <style>
         :root {
-            --bg: #0a0a0a;
-            --text: #ffffff;
-            --accent: #00ff88;
+            --glow-color: #00ff41;
+            --bg-color: #050505;
+            --main-font: 'Courier New', Courier, monospace;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--glow-color);
+            font-family: var(--main-font);
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .container {
-            text-align: center;
+
+        /* Эффект старого монитора */
+        body::before {
+            content: " ";
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .terminal {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--glow-color);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            padding: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--glow-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .glitch {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                        -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            animation: glitch 500ms infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 #f00, -0.05em -0.025em 0 #0f0, 0.025em 0.05em 0 #00f; }
+            14% { text-shadow: 0.05em 0 0 #f00, -0.05em -0.025em 0 #0f0, 0.025em 0.05em 0 #00f; }
+            15% { text-shadow: -0.05em -0.025em 0 #f00, 0.025em 0.025em 0 #0f0, -0.05em -0.05em 0 #00f; }
+            49% { text-shadow: -0.05em -0.025em 0 #f00, 0.025em 0.025em 0 #0f0, -0.05em -0.05em 0 #00f; }
+            50% { text-shadow: 0.025em 0.05em 0 #f00, 0.05em 0 0 #0f0, 0 -0.05em 0 #00f; }
+            99% { text-shadow: 0.025em 0.05em 0 #f00, 0.05em 0 0 #0f0, 0 -0.05em 0 #00f; }
+            100% { text-shadow: -0.025em 0 0 #f00, -0.025em -0.025em 0 #0f0, -0.025em -0.05em 0 #00f; }
+        }
+
+        .bio-text {
+            line-height: 1.6;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
             border: 1px solid #333;
-            padding: 40px;
-            border-radius: 15px;
-            background: #111;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
+            padding: 10px;
+            background: rgba(0, 255, 65, 0.05);
         }
-        .container:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-        }
-        h1 {
-            color: var(--accent);
-            letter-spacing: 2px;
+
+        .stat-item span {
+            display: block;
+            font-size: 0.8rem;
+            color: #888;
             text-transform: uppercase;
         }
-        p {
-            opacity: 0.8;
-            line-height: 1.6;
+
+        .links {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
         }
-        .status {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 5px 15px;
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid var(--accent);
-            border-radius: 20px;
-            font-size: 0.8em;
-            color: var(--accent);
+
+        .links a {
+            color: var(--bg-color);
+            background: var(--glow-color);
+            text-decoration: none;
+            padding: 8px 15px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .links a:hover {
+            box-shadow: 0 0 15px var(--glow-color);
+            transform: scale(1.05);
+        }
+
+        .typing::after {
+            content: "|";
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Адаптация для мобильных */
+        @media (max-width: 600px) {
+            .glitch { font-size: 1.8rem; }
+            .terminal { padding: 15px; }
+            .bio-text { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to My Project</h1>
-        <p>Этот сайт защищен и оптимизирован для работы 24/7.</p>
-        <div class="status">System Online</div>
+
+<div class="terminal">
+    <div class="header">
+        <span>STATUS: ENCRYPTED</span>
+        <span>USER: M1CRO</span>
     </div>
+
+    <h1 class="glitch">M1CRO</h1>
+    
+    <div class="bio-text">
+        <p class="typing">> Инициализация профиля... Доступ разрешен.</p><br>
+        <p>Я исследую границы дозволенного в коде. Специализируюсь на разработке многофункционального ПО на <strong>Python</strong> и <strong>Bash</strong> — от прикладных утилит до систем анализа векторов угроз.</p><br>
+        <p>Моя страсть — не просто писать код, а понимать, как бьется механическое сердце каждого устройства. Я препарирую железо ПК и смартфонов, изучая их архитектуру изнутри. Контентмейкер, создающий мосты между технологиями и реальностью.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <span>Primary OS</span>
+            Linux / Android
+        </div>
+        <div class="stat-item">
+            <span>Main Skill</span>
+            Python Development
+        </div>
+        <div class="stat-item">
+            <span>Hardware focus</span>
+            Mobile & PC Internals
+        </div>
+    </div>
+
+    <div class="links">
+        <a href="#">TELEGRAM CHANNEL</a>
+        <a href="#">TIKTOK PROFILE</a>
+        <a href="#">PROJECTS</a>
+    </div>
+</div>
+
+<script>
+    // Простой эффект печатающегося текста для первой строки
+    const text = "> Инициализация профиля... Доступ разрешен.";
+    const element = document.querySelector('.typing');
+    element.innerHTML = "";
+    let i = 0;
+
+    function typeWriter() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 50);
+        }
+    }
+    typeWriter();
+</script>
+
 </body>
 </html>
